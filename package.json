@@ -11,7 +11,8 @@
     "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. .",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest src --config jest.config.json",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "tw-view": "tailwind-config-viewer -c tailwind.config.cjs -p 3010"
   },
   "devDependencies": {
     "@babel/core": "^7.14.0",
@@ -38,6 +39,7 @@
     "svelte-check": "^2.2.6",
     "svelte-jester": "^2.0.1",
     "svelte-preprocess": "^4.10.1",
+    "tailwind-config-viewer": "^1.6.3",
     "tailwindcss": "^3.0.7",
     "ts-jest": "^27.0.0",
     "tslib": "^2.3.1",
