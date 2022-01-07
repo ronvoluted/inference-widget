@@ -1,5 +1,4 @@
 <script lang="ts">
-import { get } from 'svelte/store';
 import { loadedImage, imageIsLoaded } from '$lib/stores';
 
 let zone: HTMLElement;
