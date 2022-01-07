@@ -20,6 +20,26 @@ const supportedTypes: ReadonlyArray<string> = [
 
 let unsupportedType = false;
 
+const loadFile = (file: File): void => {
+  const fileReader: FileReader = new FileReader();
+
+  try {
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => {
+      const result = fileReader.result;
+      if (typeof result === 'string') {
+        $loadedImage = fileReader.result as string;
+        $imageIsLoaded = true;
+      }
+    };
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const handleClick: EventListener = (event) => {
+  input.click();
+};
 const handleDragEnter: EventListener = (event) => {
   instructions.classList.toggle('animate-bounce', true);
 };
@@ -44,28 +64,27 @@ const handleDrop = (event: DragEvent) => {
     return;
   }
 
-  const fileReader: FileReader = new FileReader();
+  loadFile(file);
+};
 
-  try {
-    fileReader.readAsDataURL(file);
-    fileReader.onload = () => {
-      const result = fileReader.result;
-      if (typeof result === 'string') {
-        $loadedImage = fileReader.result as string;
-        $imageIsLoaded = true;
-      }
-    };
-  } catch (error) {
-    console.error(error);
+const handleInputChange = (event: InputEvent) => {
+  const inputElem = event.target as HTMLInputElement;
+  if (!inputElem.files?.length) {
+    return;
   }
+
+  const file = inputElem.files[0];
+
+  loadFile(file);
 };
 </script>
 
 <div
   bind:this={zone}
-  on:dragenter|preventDefault={handleDragEnter}
+  on:click={handleClick}
+  on:dragenter={handleDragEnter}
+  on:dragleave={handleDragLeave}
   on:dragover|preventDefault
-  on:dragleave|preventDefault={handleDragLeave}
   on:drop|preventDefault={handleDrop}
   class="grid w-full border-4 border-blue-400 border-dashed rounded-lg cursor-pointer place-items-center aspect-square"
 >
@@ -75,5 +94,12 @@ const handleDrop = (event: DragEvent) => {
       : ''}
   </div>
 
-  <input bind:this={input} type="file" name="imageInput" class="hidden" />
+  <!-- Hidden with opacity instead of visibility so that it's still accessible to screen readers -->
+  <input
+    type="file"
+    bind:this={input}
+    on:change={handleInputChange}
+    accept={supportedTypes.join(',')}
+    class="absolute opacity-0"
+  />
 </div>
