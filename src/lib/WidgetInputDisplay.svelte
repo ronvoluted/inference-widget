@@ -1,4 +1,5 @@
 <script lang="ts">
+import { loadedImage } from './stores';
 import WidgetInputDisplayNode from './WidgetInputDisplayNode.svelte';
 
 let inputImage: HTMLImageElement;
@@ -15,7 +16,8 @@ $: image = inputImage && {
   </h1>
   <!-- <div class="grid place-items-center"> -->
   <div class="relative w-full h-full group">
-    <img bind:this={inputImage} src="/stuff.jpg" alt="" class="my-auto drop-shadow-lg" />
+    <img bind:this={inputImage} src={$loadedImage} alt="" class="my-auto drop-shadow-lg" />
+    <!-- <img bind:this={inputImage} src="/stuff.jpg" alt="" class="my-auto drop-shadow-lg" /> -->
     <!-- <img bind:this={inputImage} src="/building.jpg" alt="" class="my-auto drop-shadow-lg" /> -->
     <div class="absolute top-0 left-0 w-full h-full">
       <WidgetInputDisplayNode {image} />
