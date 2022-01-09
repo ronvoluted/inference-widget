@@ -1,16 +1,18 @@
 <script lang="ts">
+import { fade } from 'svelte/transition';
 import WidgetOutputSlider from './WidgetOutputSlider.svelte';
 import WidgetOutputObjects from './WidgetOutputObjects.svelte';
 import WidgetOutputLabels from './WidgetOutputLabels.svelte';
-import WidgetOutputDescription from './WidgetOutputDescription.svelte';
-
-export let objects: any = [1, 2, 3];
+import WidgetOutputText from './WidgetOutputText.svelte';
 </script>
 
-<section class="output flex flex-col gap-6 w-full p-4 border-2 rounded-lg bg-slate-200">
-  <h1 class="font-bold -mb-4">Inference output</h1>
+<section
+  class="flex flex-col w-full gap-6 p-4 border-2 rounded-lg output border-slate-100 bg-slate-200 drop-shadow-md"
+  in:fade
+>
+  <h1 class="-mb-4 font-bold">Inference output</h1>
   <WidgetOutputSlider />
-  <WidgetOutputObjects {objects} />
+  <WidgetOutputObjects />
   <WidgetOutputLabels />
-  <WidgetOutputDescription />
+  <WidgetOutputText />
 </section>

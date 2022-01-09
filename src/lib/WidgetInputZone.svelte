@@ -1,5 +1,6 @@
 <script lang="ts">
-import { loadedImage, imageIsLoaded } from '$lib/stores';
+import { imageIsLoaded, loadedImage, visionResponse } from '$lib/stores';
+import type { VisionResponse } from 'src/global';
 
 let zone: HTMLElement;
 let input: HTMLInputElement;
@@ -19,16 +20,41 @@ const supportedTypes: ReadonlyArray<string> = [
 
 let unsupportedType = false;
 
-const loadFile = (file: File): void => {
+const annotateImage = async (encodedString: string): Promise<void> => {
+  try {
+    const annotateRes = await fetch('/annotate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(encodedString),
+    });
+
+    const annotateJSON: VisionResponse = await annotateRes.json();
+
+    $visionResponse = annotateJSON;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const loadFile = async (file: File): Promise<void> => {
   const fileReader: FileReader = new FileReader();
 
   try {
     fileReader.readAsDataURL(file);
-    fileReader.onload = () => {
+
+    fileReader.onerror = () => {
+      throw new Error('Error reading file');
+    };
+
+    fileReader.onload = async () => {
       const result = fileReader.result;
       if (typeof result === 'string') {
-        $loadedImage = fileReader.result as string;
+        $loadedImage = result as string;
         $imageIsLoaded = true;
+
+        await annotateImage(result);
       }
     };
   } catch (error) {
@@ -73,7 +99,7 @@ const handleInputChange: EventListener = (event) => {
 
 <div
   bind:this={zone}
-  on:click={handleClick}
+  on:click|stopPropagation={handleClick}
   on:dragleave={handleDragLeave}
   on:dragend={handleDragLeave}
   on:dragover|preventDefault={handleDragOver}

@@ -1,34 +1,33 @@
 <script lang="ts">
-export let image: ImageDimensions;
+import type { LocalisedObject } from 'src/global';
 
-let frame: HTMLElement;
+export let index: number;
+export let object: LocalisedObject;
+export let image: { width: number; height: number };
 
-let localisation: Localisation = {
-  description: 'Sunglasses',
-  centre: { x: 0.82, y: 0.51 },
-  width: 0.13,
-  height: 0.11,
-};
+let box: HTMLElement;
 
-$: left = (localisation.centre.x - localisation.width / 2) * 100;
-$: top = (localisation.centre.y - localisation.height / 2) * 100;
-$: width = image && image.width * localisation.width;
-$: height = image && image.height * localisation.height;
+$: left = object.centre && object.centre.x * 100;
+$: top = object.centre && object.centre.y * 100;
+$: width = image && image.width * object.width;
+$: height = image && image.height * object.height;
 
 const handleClick: EventListener = (event) => {
-  frame.classList.toggle('invisible');
+  box.classList.toggle('invisible');
 };
 </script>
 
-<div class="relative origin-center" style="left: {left}%; top: {top}%">
+<!-- Objects have already been sorted by size, so utilise their array index to 
+     stack smaller objects on top, helping to prevent overlapping nodes from blocking each other  -->
+<div class="relative origin-center" style="left: {left}%; top: {top}%; z-index: {index + 1}">
   <div
-    bind:this={frame}
-    class="absolute invisible -translate-x-1/2 -translate-y-1/2 bg-opacity-75 border-blue-400 frame bg-transparent-blue border-thin sm:visible"
+    bind:this={box}
+    class="absolute invisible xs:visible -translate-x-1/2 -translate-y-1/2 bg-opacity-75 border-blue-400 box bg-transparent-blue border-thin"
     style="width: {width}px; height: {height}px"
   >
-    <div class="-mt-5 text-sm text-white drop-shadow-text">{localisation.description}</div>
+    <div class="-mt-5 text-sm text-white drop-shadow-text">{object.name}</div>
   </div>
-  <div class="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer sm:cursor-default" on:click={handleClick}>
+  <div class="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer xs:hidden" on:click={handleClick}>
     <div
       class="w-4 border-2 rounded-full motion-safe:group-hover:animate-bounce sm:motion-safe:group-hover:animate-none bg-slate-200 border-stone-700 aspect-square drop-shadow-lg"
     />

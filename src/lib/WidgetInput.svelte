@@ -4,7 +4,10 @@ import WidgetInputDisplay from './WidgetInputDisplay.svelte';
 import WidgetInputZone from './WidgetInputZone.svelte';
 </script>
 
-<section class="input relative {$imageIsLoaded ? 'w-full h-fit' : 'mx-auto'} p-4 border-2 rounded-lg bg-slate-200">
+<section
+  class="input relative {$imageIsLoaded ? 'w-full h-fit' : 'mx-auto'}
+         p-4 border-2 border-slate-100 rounded-lg bg-slate-200 drop-shadow-md"
+>
   <h1
     class="absolute pr-2 pb-1 bg-slate-200 {$imageIsLoaded
       ? ''

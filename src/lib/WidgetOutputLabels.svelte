@@ -1,16 +1,5 @@
 <script lang="ts">
-let labels = [
-  'Sunglasses',
-  'Eyewear',
-  'Gadget',
-  'Font',
-  'Communication Device',
-  'Passport',
-  'Lens',
-  'Knife',
-  'Book',
-  'Coin',
-];
+import { labels } from '$lib/stores';
 
 const sizes: Record<number, string> = {
   0: 'text-3xl leading-6',
@@ -28,18 +17,18 @@ const sizes: Record<number, string> = {
 
 <section class="labels">
   <h1 class="pb-1 mb-3 text-xl border-b-4 border-gray-300 border-dotted">Labels</h1>
-  <!-- <hr class="border-b-2" /> -->
   <ul>
-    {#each labels as label, i}
+    {#each [...$labels] as label, i}
       <li class="w-full flex flex-row place-content-between p-2 {i % 2 === 0 ? 'bg-transparent-blue' : ''}">
         {#if i < 4}
-          <span class={sizes[i]}>{label}</span>
+          <span class={sizes[i]}>{label.description}</span>
         {:else}
-          <span>{label}</span>
+          <span>{label.description}</span>
         {/if}
-        <span>{88.3}%</span>
-        <!-- <span>{label.confidence}%</span> -->
+        <span>{(label.confidence * 100).toFixed(1)}%</span>
       </li>
+    {:else}
+      <p class="text-center">No labels detected</p>
     {/each}
   </ul>
 </section>
