@@ -1,38 +1,50 @@
-# create-svelte
+# Inference Widget
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte);
+Multi-task image inference widget using the Google Vision API. The stack is Svelte(Kit), TypeScript, Tailwind and Node.
 
-## Creating a project
+Four image tasks are performed on the same input:
 
-If you're seeing this, you've probably already done this step. Congrats!
+- Object detection
+- Label classification
+- Optical character recognition
+- Dominant colour detection
 
-```bash
-# create a new project in the current directory
-npm init svelte@next
+Inference annotations are then presented/interacted with in multiple ways:
 
-# create a new project in my-app
-npm init svelte@next my-app
-```
+- Object bounding boxes on original image
+- Isolated object images
+- Dominant colours displayed
+- Labels with highest confidence represented by size
+- Text blocks with copy to clipboard function
+- Threshold slider to filter inferences by confidence
 
-> Note: the `@next` is temporary
+## Google Application Credentials
 
-## Developing
+A `GOOGLE_APPLICATION_CREDENTIALS.json` file containing a service account key needs to be provided at the root to authenticate Vision API requests.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-Before creating a production version of your app, install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment. Then:
+## Installing and running
 
 ```bash
-npm run build
+npm i
+npm run build && npm run preview
 ```
 
-> You can preview the built app with `npm run preview`, regardless of whether you installed an adapter. This should _not_ be used to serve your app in production.
+## Deployment
+
+The widget is currently deployed at [https://vercel.app/inference-widget](https://vercel.app/inference-widget)
+
+## Notes
+
+### Mobile view
+
+On small screens, viewing up to six detected object localisations could get cluttered. Instead of showing the bounding boxes up-front, objects are indicated by tappable nodes that will toggle them individually.
+
+![Object localisation mobile view](https://github.com/ronvoluted/inference-widget/raw/main/docs/mobile-view.gif)
+
+### Dominant colours
+
+The colours surrounding object images in the "Inference output" pane represent the 3 most dominant colours in the image. This one sounded better in my head than it looked in practice 😅
+
+### SvelteKit
+
+This is a full-stack project instead of just front-end/a static Svelte site, because a separate cloud function would have been required to make authenticated API requests anyway. Managing these requests in SvelteKit endpoints made sense.
