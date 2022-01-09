@@ -52,5 +52,8 @@
     "maintained node versions",
     "not IE 11",
     "not dead"
-  ]
+  ],
+  "dependencies": {
+    "@google-cloud/vision": "^2.4.2"
+  }
 }

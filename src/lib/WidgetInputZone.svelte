@@ -1,6 +1,6 @@
 <script lang="ts">
-import { get } from 'svelte/store';
-import { loadedImage, imageIsLoaded } from '$lib/stores';
+import { imageIsLoaded, loadedImage, visionResponse } from '$lib/stores';
+import type { VisionResponse } from 'src/global';
 
 let zone: HTMLElement;
 let input: HTMLInputElement;
@@ -20,16 +20,41 @@ const supportedTypes: ReadonlyArray<string> = [
 
 let unsupportedType = false;
 
-const loadFile = (file: File): void => {
+const annotateImage = async (encodedString: string): Promise<void> => {
+  try {
+    const annotateRes = await fetch('/annotate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(encodedString),
+    });
+
+    const annotateJSON: VisionResponse = await annotateRes.json();
+
+    $visionResponse = annotateJSON;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const loadFile = async (file: File): Promise<void> => {
   const fileReader: FileReader = new FileReader();
 
   try {
     fileReader.readAsDataURL(file);
-    fileReader.onload = () => {
+
+    fileReader.onerror = () => {
+      throw new Error('Error reading file');
+    };
+
+    fileReader.onload = async () => {
       const result = fileReader.result;
       if (typeof result === 'string') {
-        $loadedImage = fileReader.result as string;
+        $loadedImage = result as string;
         $imageIsLoaded = true;
+
+        await annotateImage(result);
       }
     };
   } catch (error) {
@@ -37,19 +62,12 @@ const loadFile = (file: File): void => {
   }
 };
 
-const handleClick: EventListener = (event) => {
-  input.click();
-};
-const handleDragEnter: EventListener = (event) => {
-  instructions.classList.toggle('animate-bounce', true);
-};
-const handleDragLeave: EventListener = (event) => {
-  if (zone.contains(event.currentTarget as HTMLElement)) {
-    return;
-  }
+const handleClick: EventListener = (event) => input.click();
 
-  instructions.classList.toggle('animate-bounce', false);
-};
+const handleDragOver: EventListener = (event) => instructions.classList.toggle('animate-bounce', true);
+
+const handleDragLeave: EventListener = (event) => instructions.classList.toggle('animate-bounce', false);
+
 const handleDrop = (event: DragEvent) => {
   instructions.classList.toggle('animate-bounce', false);
 
@@ -67,13 +85,13 @@ const handleDrop = (event: DragEvent) => {
   loadFile(file);
 };
 
-const handleInputChange = (event: InputEvent) => {
+const handleInputChange: EventListener = (event) => {
   const inputElem = event.target as HTMLInputElement;
   if (!inputElem.files?.length) {
     return;
   }
 
-  const file = inputElem.files[0];
+  const file: File = inputElem.files[0];
 
   loadFile(file);
 };
@@ -81,18 +99,18 @@ const handleInputChange = (event: InputEvent) => {
 
 <div
   bind:this={zone}
-  on:click={handleClick}
-  on:dragenter={handleDragEnter}
+  on:click|stopPropagation={handleClick}
   on:dragleave={handleDragLeave}
-  on:dragover|preventDefault
+  on:dragend={handleDragLeave}
+  on:dragover|preventDefault={handleDragOver}
   on:drop|preventDefault={handleDrop}
   class="grid w-full border-4 border-blue-400 border-dashed rounded-lg cursor-pointer place-items-center aspect-square"
 >
-  <div bind:this={instructions} class="w-1/2 font-medium text-center">
+  <p bind:this={instructions} class="w-1/2 font-medium text-center cursor-pointer pointer-events-none select-none">
     Drag and drop image here or click to browse{unsupportedType
       ? '\n(Supported files: jpg, png, gif, bmp, webp, ico, tiff and pdf)'
       : ''}
-  </div>
+  </p>
 
   <!-- Hidden with opacity instead of visibility so that it's still accessible to screen readers -->
   <input
