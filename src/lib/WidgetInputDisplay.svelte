@@ -25,7 +25,7 @@ afterUpdate(() => {
 });
 </script>
 
-<div class="w-full rounded-lg h-fit" in:fade>
+<div class="display w-full rounded-lg h-fit" in:fade>
   <button
     on:click={reset}
     class="absolute px-2 py-1 text-xs border-2 rounded-lg border-transparent-blue right-4 top-4 bg-transparent-blue "
@@ -42,8 +42,8 @@ afterUpdate(() => {
       </div>
     {/each}
     {#if !$visionResponse?.length}
-      <div class="absolute grid place-items-center w-full h-full bg-transparent-blue">
-        <img class="w-1/2 aspect-square animate-spin origin-center" src="/spinner.svg" role="presentation" alt="" />
+      <div class="absolute grid w-full h-full place-items-center bg-transparent-blue">
+        <img class="w-1/2 origin-center aspect-square animate-spin" src="/spinner.svg" role="presentation" alt="" />
       </div>
     {/if}
   </div>

@@ -104,7 +104,7 @@ const handleInputChange: EventListener = (event) => {
   on:dragend={handleDragLeave}
   on:dragover|preventDefault={handleDragOver}
   on:drop|preventDefault={handleDrop}
-  class="grid w-full border-4 border-blue-400 border-dashed rounded-lg cursor-pointer place-items-center aspect-square"
+  class="zone grid w-full border-4 border-blue-400 border-dashed rounded-lg cursor-pointer place-items-center aspect-square"
 >
   <p bind:this={instructions} class="w-1/2 font-medium text-center cursor-pointer pointer-events-none select-none">
     Drag and drop image here or click to browse{unsupportedType
