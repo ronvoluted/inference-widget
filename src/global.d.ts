@@ -1,15 +1,38 @@
 /// <reference types="@sveltejs/kit" />
 
-type Coordinates = {
-  x: number;
-  y: number;
-};
+import type { FeaturesMethod } from '@google-cloud/vision/build/src/helpers';
 
-type Localisation = {
-  description: string;
-  centre: Coordinates;
+type LocalisedObject = {
+  name: string;
+  confidence: number;
+  left: number;
+  top: number;
   width: number;
   height: number;
+  centre: {
+    x: number;
+    y: number;
+  };
 };
 
-type ImageDimensions = { width: number; height: number };
+type Label = {
+  description: string;
+  confidence: number;
+};
+
+type Word = {
+  word: string;
+  confidence: number;
+};
+
+type TextBlock = {
+  words: Word[];
+  confidence: number;
+};
+
+type DominantColour = {
+  colour: string;
+  confidence: number;
+};
+
+type VisionResponse = Awaited<ReturnType<FeaturesMethod['annotateImage']>>;
