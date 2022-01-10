@@ -6,7 +6,7 @@ const copyToClipboard: EventListener = () => {
 };
 </script>
 
-<section class="description">
+<section class="text">
   <h1 class="pb-1 mb-3 text-xl border-b-4 border-gray-300 border-dotted">Text</h1>
   {#if $text.length}
     <p

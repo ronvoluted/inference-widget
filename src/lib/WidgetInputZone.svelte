@@ -2,7 +2,6 @@
 import { imageIsLoaded, loadedImage, visionResponse } from '$lib/stores';
 import type { VisionResponse } from 'src/global';
 
-let zone: HTMLElement;
 let input: HTMLInputElement;
 let instructions: HTMLElement;
 
@@ -62,11 +61,11 @@ const loadFile = async (file: File): Promise<void> => {
   }
 };
 
-const handleClick: EventListener = (event) => input.click();
+const handleClick: EventListener = () => input.click();
 
-const handleDragOver: EventListener = (event) => instructions.classList.toggle('animate-bounce', true);
+const handleDragOver: EventListener = () => instructions.classList.toggle('animate-bounce', true);
 
-const handleDragLeave: EventListener = (event) => instructions.classList.toggle('animate-bounce', false);
+const handleDragLeave: EventListener = () => instructions.classList.toggle('animate-bounce', false);
 
 const handleDrop = (event: DragEvent) => {
   instructions.classList.toggle('animate-bounce', false);
@@ -98,13 +97,12 @@ const handleInputChange: EventListener = (event) => {
 </script>
 
 <div
-  bind:this={zone}
   on:click|stopPropagation={handleClick}
   on:dragleave={handleDragLeave}
   on:dragend={handleDragLeave}
   on:dragover|preventDefault={handleDragOver}
   on:drop|preventDefault={handleDrop}
-  class="zone grid w-full border-4 border-blue-400 border-dashed rounded-lg cursor-pointer place-items-center aspect-square"
+  class="grid w-full border-4 border-blue-400 border-dashed rounded-lg cursor-pointer zone place-items-center aspect-square"
 >
   <p bind:this={instructions} class="w-1/2 font-medium text-center cursor-pointer pointer-events-none select-none">
     Drag and drop image here or click to browse{unsupportedType

@@ -14,6 +14,6 @@ import { confidenceThreshold } from '$lib/stores';
       bind:value={$confidenceThreshold}
       class="w-full cursor-pointer"
     />
-    <span class="w-4 text-right mr-8 tabular-nums">{($confidenceThreshold * 100).toFixed(1)}%</span>
+    <span class="w-4 mr-8 text-right tabular-nums">{($confidenceThreshold * 100).toFixed(1)}%</span>
   </div>
 </section>
