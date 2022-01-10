@@ -12,7 +12,7 @@ $: top = object.centre && object.centre.y * 100;
 $: width = image && image.width * object.width;
 $: height = image && image.height * object.height;
 
-const handleClick: EventListener = (event) => {
+const handleClick: EventListener = () => {
   box.classList.toggle('invisible');
 };
 </script>
@@ -22,7 +22,7 @@ const handleClick: EventListener = (event) => {
 <div class="relative origin-center" style="left: {left}%; top: {top}%; z-index: {index + 1}">
   <div
     bind:this={box}
-    class="absolute invisible xs:visible -translate-x-1/2 -translate-y-1/2 bg-opacity-75 border-blue-400 box bg-transparent-blue border-thin"
+    class="absolute invisible -translate-x-1/2 -translate-y-1/2 bg-opacity-75 border-blue-400 xs:visible box bg-transparent-blue border-thin"
     style="width: {width}px; height: {height}px"
   >
     <div class="-mt-5 text-sm text-white drop-shadow-text">{object.name}</div>
