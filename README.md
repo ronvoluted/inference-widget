@@ -31,7 +31,7 @@ npm run build && npm run preview
 
 ## Deployment
 
-The widget is currently deployed at [https://vercel.app/inference-widget](https://vercel.app/inference-widget)
+The widget is currently deployed at [https://inference-widget.onrender.com/](https://inference-widget.onrender.com)
 
 ## Notes
 
